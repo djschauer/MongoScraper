@@ -5,11 +5,14 @@ $.getJSON("/articles", function(data) {
   // For each one
   for (var i = 0; i < data.length; i++) {
     // Display the apropos information on the page
-    $("#articles").append("<div class='card'> <div class='card-header'> "  + data[i].headline + "</div> <div class='card-body'> <p class='card-text'>" + data[i].summary + "<br />" + data[i].link + "</p><button type='button' class='btn btn-dark commentBtn' data-id ='" + data[i]._id + "'>Comment</button></div>");
+    $("#articles").append("<div class='card'> <div class='card-header'> "  + data[i].headline + "</div> <div class='card-body'> <p class='card-text'>" + data[i].summary + "<br />" + data[i].link + "</p><button type='button' class='btn btn-dark commentBtn' data-toggle='modal' data-target='#commentModal' data-id ='" + data[i]._id + "'>Comment</button></div>");
   }
   $(".commentBtn").click(function(event) {
     event.preventDefault();
-    $("#notes").empty();
+    $("#commentTitle").empty();
+    $("#commentHeadline").empty();
+    $("#commentBody").empty();
+    $("#commentSave").empty();
     // Save the id from the p tag
     var thisId = $(this).attr("data-id");
     console.log("clicked")
@@ -23,13 +26,13 @@ $.getJSON("/articles", function(data) {
       .then(function(data) {
         console.log(data);
         // The title of the article
-        $("#notes").append("<h2>" + data.headline + "</h2>");
+        $("#commentHeadline").append("<h2>" + data.headline + "</h2>");
         // An input to enter a new title
-        $("#notes").append("<input id='titleinput' name='title' >");
+        $("#commentTitle").append("<input type='text' class='form-control' id='titleinput' name='title' >");
         // A textarea to add a new note body
-        $("#notes").append("<textarea id='bodyinput' name='body'></textarea>");
+        $("#commentBody").append("<textarea class='form-control' id='bodyinput' name='body'></textarea>");
         // A button to submit a new note, with the id of the article saved to it
-        $("#notes").append("<button type='button' class='btn btn-dark' data-id='" + data._id + "' id='savenote'>Save Comment</button>");
+        $("#commentSave").append("<button type='button' class='btn btn-dark' data-id='" + data._id + "' id='savenote'>Save Comment</button>");
   
         // If there's a note in the article
         if (data.note) {
